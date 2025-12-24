@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NeuroWrite</title>
+</head>
+
+<body style="font-family: Times New Roman, serif; background:#f7f7f5; padding:2rem;">
+
+<h2>NeuroWrite</h2>
+<p style="opacity:0.75; font-size:0.9rem;">
+ NeuroWrite is a calm writing aid platform designed to make reading and proofreading easier for people with autism and ADHD. By placing a slight emphasis on the first part of words, it helps the eyes find reference points in the text, reducing cognitive overload and improving concentration without changing what you write or how you think. NeuroWrite is not a cure or treatment, but an optional visual aid that you can turn on or off at any time. Simply type your text, adjust the emphasis level if necessary, then copy it using the appropriate option to wherever you want to publish it (chat, social media or documents). It is lightweight, distraction-free and designed to respect neurodivergent ways of thinking. Choose how to copy depending on where you paste. 
+</p>
+
+<label>
+  Emphasis level:
+  <input id="ratio" type="range" min="0.1" max="0.6" step="0.05" value="0.4">
+</label>
+
+<label style="margin-left:1rem;">
+  <input id="toggle" type="checkbox" checked>
+  Enable emphasis
+</label>
+
+<br><br>
+
+<textarea id="input"
+  rows="6"
+  style="width:100%; padding:1rem; font-family: Times New Roman, serif;"
+  placeholder="Type here..."></textarea>
+
+<div id="preview"
+  style="margin-top:1.5rem;
+         padding:1.5rem;
+         background:#fff;
+         line-height:1.8;
+         font-family: Times New Roman, serif;">
+</div>
+
+<button id="copyUnicode" style="margin-top:1rem;">
+  Copy for Social Media
+</button>
+
+<button id="copyHtml" style="margin-left:1rem;">
+  Copy for Documents Word / WPS...
+</button>
+
+<script>
+const input = document.getElementById('input');
+const preview = document.getElementById('preview');
+const ratioInput = document.getElementById('ratio');
+const toggle = document.getElementById('toggle');
+
+const copyUnicode = document.getElementById('copyUnicode');
+const copyHtml = document.getElementById('copyHtml');
+
+// Unicode bold map (WhatsApp-safe)
+const boldMap = {
+  a:'𝐚', b:'𝐛', c:'𝐜', d:'𝐝', e:'𝐞', f:'𝐟',
+  g:'𝐠', h:'𝐡', i:'𝐢', j:'𝐣', k:'𝐤', l:'𝐥',
+  m:'𝐦', n:'𝐧', o:'𝐨', p:'𝐩', q:'𝐪', r:'𝐫',
+  s:'𝐬', t:'𝐭', u:'𝐮', v:'𝐯', w:'𝐰', x:'𝐱',
+  y:'𝐲', z:'𝐳'
+};
+
+function unicodeBold(text) {
+  return text.split('').map(c => {
+    const l = c.toLowerCase();
+    return boldMap[l] ? (c === l ? boldMap[l] : boldMap[l].toUpperCase()) : c;
+  }).join('');
+}
+
+function emphasize(word, ratio, mode) {
+  const cut = Math.max(1, Math.floor(word.length * ratio));
+  const first = word.slice(0, cut);
+  const rest = word.slice(cut);
+
+  if (mode === 'unicode') {
+    return unicodeBold(first) + rest;
+  }
+
+  // HTML bold (Word/WPS safe)
+  return `<b>${first}</b>${rest}`;
+}
+
+function renderPreview() {
+  const text = input.value;
+  if (!toggle.checked) {
+    preview.innerText = text;
+    return;
+  }
+
+  const ratio = parseFloat(ratioInput.value);
+
+  const html = text.split(/(\s+)/).map(token => {
+    if (token.trim() === '') return token;
+    return emphasize(token, ratio, 'html');
+  }).join('');
+
+  preview.innerHTML = html;
+}
+
+input.addEventListener('input', renderPreview);
+ratioInput.addEventListener('input', renderPreview);
+toggle.addEventListener('change', renderPreview);
+
+// Copy for WhatsApp (Unicode)
+copyUnicode.onclick = async () => {
+  const ratio = parseFloat(ratioInput.value);
+  const text = input.value.split(/(\s+)/).map(token => {
+    if (token.trim() === '') return token;
+    return emphasize(token, ratio, 'unicode');
+  }).join('');
+
+  await navigator.clipboard.writeText(text);
+  copyUnicode.textContent = 'Copied ✓';
+  setTimeout(() => copyUnicode.textContent = 'Copy for WhatsApp', 1500);
+};
+
+// Copy for Word / WPS (HTML)
+copyHtml.onclick = async () => {
+  const html = `
+    <div style="font-family: Times New Roman, serif; font-size:16px; line-height:1.8;">
+      ${preview.innerHTML}
+    </div>
+  `;
+
+  await navigator.clipboard.write([
+    new ClipboardItem({
+      'text/html': new Blob([html], { type: 'text/html' }),
+      'text/plain': new Blob([preview.innerText], { type: 'text/plain' })
+    })
+  ]);
+
+  copyHtml.textContent = 'Copied ✓';
+  setTimeout(() => copyHtml.textContent = 'Copy for Word / WPS', 1500);
+};
+</script>
+
+</body>
+</html>
