@@ -2,60 +2,296 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NeuroWrite</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Times New Roman', serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8eef3 100%);
+      min-height: 100vh;
+      padding: 0;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #1e90ff 0%, #ff8c00 100%);
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-container {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+      height: 100px;
+    }
+    
+    .logo-placeholder {
+      font-size: 3rem;
+      background: linear-gradient(135deg, #1e90ff 0%, #ff8c00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: bold;
+      user-select: none;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      margin-bottom: 1.5rem;
+    }
+    
+    .description-text {
+      opacity: 0.85;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #444;
+    }
+    
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.5rem;
+      background: #f8f9fc;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .control-group label {
+      font-size: 0.9rem;
+      color: #555;
+      font-weight: 500;
+    }
+    
+    input[type="range"] {
+      width: 150px;
+      accent-color: #1e90ff;
+    }
+    
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #1e90ff;
+      cursor: pointer;
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 1.2rem;
+      font-family: 'Times New Roman', serif;
+      font-size: 1rem;
+      border: 2px solid #e0e6ed;
+      border-radius: 8px;
+      resize: vertical;
+      transition: border-color 0.3s;
+      line-height: 1.6;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #1e90ff;
+    }
+    
+    .preview-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      line-height: 1.8;
+      font-family: 'Times New Roman', serif;
+      min-height: 100px;
+      border: 1px solid #e0e6ed;
+      color: #333;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+    
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    #copyUnicode {
+      background: linear-gradient(135deg, #1e90ff 0%, #00bfff 100%);
+      color: white;
+    }
+    
+    #copyHtml {
+      background: linear-gradient(135deg, #ff8c00 0%, #ff6347 100%);
+      color: white;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .about-section {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      opacity: 0.85;
+      line-height: 1.7;
+      color: #555;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      border-radius: 8px;
+      border-left: 4px solid #f5576c;
+    }
+    
+    .contact-info {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 2px solid rgba(255, 255, 255, 0.5);
+      font-size: 0.95rem;
+    }
+    
+    .contact-info p {
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-details {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .title-section h1 {
+        font-size: 2rem;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      input[type="range"] {
+        width: 100%;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-container">
+        <!-- Replace this with your logo image: <img src="your-logo.png" alt="NeuroWrite Logo" style="max-width: 100%; height: auto;"> -->
+        <div class="logo-placeholder">NW</div>
+      </div>
+    </div>
+  </header>
 
-<body style="font-family: Times New Roman, serif; background:#f7f7f5; padding:2rem;">
+  <div class="container">
+    <div class="card">
+      <p id="description" class="description-text">
+        NeuroWrite is a calm writing aid platform designed to make reading and proofreading easier for people with autism and ADHD. By placing a slight emphasis on the first part of words, it helps the eyes find reference points in the text, reducing cognitive overload and improving concentration without changing what you write or how you think. NeuroWrite is not a cure or treatment, but an optional visual aid that you can turn on or off at any time. Simply type your text, adjust the emphasis level if necessary, then copy it using the appropriate option to wherever you want to publish it (chat, social media or documents). It is lightweight, distraction-free and designed to respect neurodivergent ways of thinking. Choose how to copy depending on where you paste.
+      </p>
+    </div>
 
-<h2>NeuroWrite</h2>
-<p style="opacity:0.75; font-size:0.9rem;">
- NeuroWrite is a calm writing aid platform designed to make reading and proofreading easier for people with autism and ADHD. By placing a slight emphasis on the first part of words, it helps the eyes find reference points in the text, reducing cognitive overload and improving concentration without changing what you write or how you think. NeuroWrite is not a cure or treatment, but an optional visual aid that you can turn on or off at any time. Simply type your text, adjust the emphasis level if necessary, then copy it using the appropriate option to wherever you want to publish it (chat, social media or documents). It is lightweight, distraction-free and designed to respect neurodivergent ways of thinking. Choose how to copy depending on where you paste. 
-</p>
+    <div class="card">
+      <div class="controls">
+        <div class="control-group">
+          <label for="ratio">Emphasis level:</label>
+          <input id="ratio" type="range" min="0.1" max="0.6" step="0.05" value="0.4">
+        </div>
+        <div class="control-group">
+          <input id="toggle" type="checkbox" checked>
+          <label for="toggle">Enable emphasis</label>
+        </div>
+      </div>
 
-<label>
-  Emphasis level:
-  <input id="ratio" type="range" min="0.1" max="0.6" step="0.05" value="0.4">
-</label>
+      <textarea id="input"
+        rows="6"
+        placeholder="Type here..."></textarea>
 
-<label style="margin-left:1rem;">
-  <input id="toggle" type="checkbox" checked>
-  Enable emphasis
-</label>
+      <div class="preview-card" id="preview"></div>
 
-<br><br>
+      <div class="button-group">
+        <button id="copyUnicode">Copy for Social Media</button>
+        <button id="copyHtml">Copy for Documents Word / WPS...</button>
+      </div>
+    </div>
 
-<textarea id="input"
-  rows="6"
-  style="width:100%; padding:1rem; font-family: Times New Roman, serif;"
-  placeholder="Type here..."></textarea>
-
-<div id="preview"
-  style="margin-top:1.5rem;
-         padding:1.5rem;
-         background:#fff;
-         line-height:1.8;
-         font-family: Times New Roman, serif;">
-</div>
-
-<button id="copyUnicode" style="margin-top:1rem;">
-  Copy for Social Media
-</button>
-
-<button id="copyHtml" style="margin-left:1rem;">
-  Copy for Documents Word / WPS...
-</button>
-
-<!-- Your paragraph with Bionic Reading -->
-<p id="aboutMe" style="margin-top:1.5rem; font-size:0.9rem; opacity:0.8;">
-  Developed by Ishara Ruyange Jean-Fraterne, an autistic writer. Inspired by a "Bionic Reading" style image, I discovered that reading the start of words first and guessing the rest helps my brain focus. NeuroWrite will remain ad-free, anonymous, and easy to access, with no login or data collection. More features will be added over time to improve accessibility for neurodivergent readers.
-</p>
+    <div class="about-section">
+      <p id="aboutMe">
+        Developed by Ishara Ruyange Jean-Fraterne, an autistic writer. Inspired by a "Bionic Reading" style image, I discovered that reading the start of words first and guessing the rest helps my brain focus. NeuroWrite will remain ad-free, anonymous, and easy to access, with no login or data collection. More features will be added over time to improve accessibility for neurodivergent readers.
+      </p>
+      <div class="contact-info">
+        <p>For any kind of support to develop and sustain this project, kindly don't hesitate to get in touch.</p>
+        <p class="contact-details">Email: jeanfraterner@gmail.com</p>
+        <p class="contact-details">Phone/WhatsApp: +256783693150</p>
+      </div>
+    </div>
+  </div>
 
 <script>
 const input = document.getElementById('input');
 const preview = document.getElementById('preview');
 const ratioInput = document.getElementById('ratio');
 const toggle = document.getElementById('toggle');
-
 const copyUnicode = document.getElementById('copyUnicode');
 const copyHtml = document.getElementById('copyHtml');
 
@@ -79,11 +315,9 @@ function emphasize(word, ratio, mode) {
   const cut = Math.max(1, Math.floor(word.length * ratio));
   const first = word.slice(0, cut);
   const rest = word.slice(cut);
-
   if (mode === 'unicode') {
     return unicodeBold(first) + rest;
   }
-
   return `<b>${first}</b>${rest}`;
 }
 
@@ -93,14 +327,11 @@ function renderPreview() {
     preview.innerText = text;
     return;
   }
-
   const ratio = parseFloat(ratioInput.value);
-
   const html = text.split(/(\s+)/).map(token => {
     if (token.trim() === '') return token;
     return emphasize(token, ratio, 'html');
   }).join('');
-
   preview.innerHTML = html;
 }
 
@@ -115,10 +346,9 @@ copyUnicode.onclick = async () => {
     if (token.trim() === '') return token;
     return emphasize(token, ratio, 'unicode');
   }).join('');
-
   await navigator.clipboard.writeText(text);
   copyUnicode.textContent = 'Copied ✓';
-  setTimeout(() => copyUnicode.textContent = 'Copy for WhatsApp', 1500);
+  setTimeout(() => copyUnicode.textContent = 'Copy for Social Media', 1500);
 };
 
 // Copy for Word / WPS (HTML)
@@ -128,19 +358,17 @@ copyHtml.onclick = async () => {
       ${preview.innerHTML}
     </div>
   `;
-
   await navigator.clipboard.write([
     new ClipboardItem({
       'text/html': new Blob([html], { type: 'text/html' }),
       'text/plain': new Blob([preview.innerText], { type: 'text/plain' })
     })
   ]);
-
   copyHtml.textContent = 'Copied ✓';
-  setTimeout(() => copyHtml.textContent = 'Copy for Word / WPS', 1500);
+  setTimeout(() => copyHtml.textContent = 'Copy for Documents Word / WPS...', 1500);
 };
 
-// Bionic Reading for your paragraph
+// Bionic Reading for paragraphs
 function applyBionicToParagraph(id, ratio) {
   const para = document.getElementById(id);
   const text = para.innerText.split(/(\s+)/).map(token => {
@@ -150,19 +378,19 @@ function applyBionicToParagraph(id, ratio) {
   para.innerHTML = text;
 }
 
-// Apply on page load
+// Apply Bionic Reading on page load
 window.addEventListener('load', () => {
   const ratio = parseFloat(ratioInput.value);
   applyBionicToParagraph('aboutMe', ratio);
+  applyBionicToParagraph('description', ratio);
 });
 
-// Update when slider changes
+// Update dynamically when slider changes
 ratioInput.addEventListener('input', () => {
   const ratio = parseFloat(ratioInput.value);
   applyBionicToParagraph('aboutMe', ratio);
+  applyBionicToParagraph('description', ratio);
 });
-
 </script>
-
 </body>
 </html>
