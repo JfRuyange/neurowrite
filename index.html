@@ -45,9 +45,9 @@
   Copy for Documents Word / WPS...
 </button>
 
-<p style="margin-top:1.5rem; font-size:0.9rem; opacity:0.8;">
-  Developed by RUYANGE Jean-Fraterne, an autistic writer. Inspired by a "Bionic Reading" style image, I discovered that reading the start of words first and guessing the rest helps my brain focus. NeuroWrite will remain ad-free, anonymous, and easy to access, with no login or data collection. More features will be added over time to improve accessibility for neurodivergent readers.
-  To help me bring this to life and sustainable, kindly don't hesitate to get in touch via email: jeanfraterner@gmail.com or WhatsApp: +256783693150.
+<!-- Your paragraph with Bionic Reading -->
+<p id="aboutMe" style="margin-top:1.5rem; font-size:0.9rem; opacity:0.8;">
+  Developed by Ishara Ruyange Jean-Fraterne, an autistic writer. Inspired by a "Bionic Reading" style image, I discovered that reading the start of words first and guessing the rest helps my brain focus. NeuroWrite will remain ad-free, anonymous, and easy to access, with no login or data collection. More features will be added over time to improve accessibility for neurodivergent readers.
 </p>
 
 <script>
@@ -84,7 +84,6 @@ function emphasize(word, ratio, mode) {
     return unicodeBold(first) + rest;
   }
 
-  // HTML bold (Word/WPS safe)
   return `<b>${first}</b>${rest}`;
 }
 
@@ -140,8 +139,30 @@ copyHtml.onclick = async () => {
   copyHtml.textContent = 'Copied ✓';
   setTimeout(() => copyHtml.textContent = 'Copy for Word / WPS', 1500);
 };
+
+// Bionic Reading for your paragraph
+function applyBionicToParagraph(id, ratio) {
+  const para = document.getElementById(id);
+  const text = para.innerText.split(/(\s+)/).map(token => {
+    if (token.trim() === '') return token;
+    return emphasize(token, ratio, 'html');
+  }).join('');
+  para.innerHTML = text;
+}
+
+// Apply on page load
+window.addEventListener('load', () => {
+  const ratio = parseFloat(ratioInput.value);
+  applyBionicToParagraph('aboutMe', ratio);
+});
+
+// Update when slider changes
+ratioInput.addEventListener('input', () => {
+  const ratio = parseFloat(ratioInput.value);
+  applyBionicToParagraph('aboutMe', ratio);
+});
+
 </script>
 
 </body>
 </html>
-
